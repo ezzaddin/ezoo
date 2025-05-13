@@ -3,166 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>البحث عن حكم</title>
+    <title>خدمات إلكترونية عصرية</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            margin: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
             background-color: #f4f4f4;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
             color: #333;
-            text-align: center;
-            margin-bottom: 20px;
+            line-height: 1.6;
         }
-        .search-form {
-            display: grid;
-            grid-template-columns: auto auto;
-            gap: 10px;
-            margin-bottom: 20px;
+
+        .service-section {
+            background-color: #fff;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
         }
-        .search-form label {
+
+        .service-section:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .service-image-container {
+            flex: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .service-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .service-info {
+            flex: 1;
+            padding: 0 30px;
             text-align: right;
         }
-        .search-form input[type="text"],
-        .search-form button {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+
+        .service-info h2 {
+            color: #007bff;
+            margin-bottom: 15px;
         }
-        .search-form button {
-            background-color: #007bff;
+
+        .service-info p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .contact-button {
+            background-color: #28a745;
             color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
-        .search-form button:hover {
-            background-color: #0056b3;
+
+        .contact-button:hover {
+            background-color: #1e7e34;
         }
-        #result-container {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+
+        .custom-request-section {
+            background-color: #fff;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            text-align: center;
         }
-        .success {
-            color: green;
-            font-weight: bold;
+
+        .custom-request-section h2 {
+            color: #007bff;
+            margin-bottom: 20px;
         }
-        .not-found {
-            color: orange;
-            font-weight: bold;
+
+        .custom-request-button {
+            background-color: #ffc107;
+            color: #333;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
-        .error {
-            color: red;
-            font-weight: bold;
+
+        .custom-request-button:hover {
+            background-color: #e0a800;
         }
-        .judgment-details p {
-            margin-bottom: 5px;
+
+        /* صور افتراضية - قم بتغييرها بمسارات صورك الحقيقية */
+        .brochures-bg { background: url('https://via.placeholder.com/400/007bff/FFFFFF?Text=Brochures') center/cover no-repeat; }
+        .cards-bg { background: url('https://via.placeholder.com/400/28a745/FFFFFF?Text=Cards') center/cover no-repeat; }
+        .identity-bg { background: url('https://via.placeholder.com/400/dc3545/FFFFFF?Text=Identity') center/cover no-repeat; }
+        .typing-bg { background: url('https://via.placeholder.com/400/ffc107/333333?Text=Typing') center/cover no-repeat; }
+        .cv-bg { background: url('https://via.placeholder.com/400/17a2b8/FFFFFF?Text=CV') center/cover no-repeat; }
+        .office-bg { background: url('https://via.placeholder.com/400/6c757d/FFFFFF?Text=Office') center/cover no-repeat; }
+        .database-bg { background: url('https://via.placeholder.com/400/008080/FFFFFF?Text=Database') center/cover no-repeat; }
+        .excel-bg { background: url('https://via.placeholder.com/400/283747/FFFFFF?Text=Excel') center/cover no-repeat; }
+
+        /* تنسيقات الاستجابة */
+        @media (max-width: 768px) {
+            .service-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            .service-section:nth-child(even) {
+                flex-direction: column;
+            }
+            .service-info {
+                padding: 20px;
+            }
+            .service-image-container {
+                width: 100%;
+                margin-bottom: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>البحث عن حكم</h1>
-        <form id="searchForm" class="search-form">
-            <label for="governorate">المحافظة:</label>
-            <input type="text" id="governorate" name="governorate">
 
-            <label for="court">المحكمة:</label>
-            <input type="text" id="court" name="court">
-
-            <label for="case_type">نوع القضية:</label>
-            <input type="text" id="case_type" name="case_type">
-
-            <label for="subtype">النوع الفرعي:</label>
-            <input type="text" id="subtype" name="subtype">
-
-            <label for="case_number">رقم القضية:</label>
-            <input type="text" id="case_number" name="case_number">
-
-            <label for="case_year">سنة القضية:</label>
-            <input type="text" id="case_year" name="case_year">
-
-            <div style="grid-column: 1 / 3; text-align: center;">
-                <button type="button" onclick="searchJudgment()">بحث</button>
+    <div class="service-section">
+        <div class="service-image-container brochures-bg" style="height: 250px;">
             </div>
-        </form>
-
-        <div id="result-container" style="display: none;">
-            <h2>نتيجة البحث</h2>
-            <div id="message"></div>
-            <div id="judgmentDetails" class="judgment-details"></div>
+        <div class="service-info">
+            <h2>تصميم برشورات احترافية</h2>
+            <p>نقدم لك تصميمات برشورات إبداعية وجذابة تعكس هوية علامتك التجارية وتوصل رسالتك بوضوح وفعالية.</p>
+            <a href="#" class="contact-button">طلب تصميم برشور</a>
         </div>
     </div>
 
-    <script>
-        async function searchJudgment() {
-            const governorate = document.getElementById('governorate').value;
-            const court = document.getElementById('court').value;
-            const case_type = document.getElementById('case_type').value;
-            const subtype = document.getElementById('subtype').value;
-            const case_number = document.getElementById('case_number').value;
-            const case_year = document.getElementById('case_year').value;
+    <div class="service-section">
+        <div class="service-image-container cards-bg" style="height: 250px;">
+            </div>
+        <div class="service-info">
+            <h2>تصميم كروت شخصية مميزة</h2>
+            <p>احصل على تصميم كروت شخصية فريدة تعبر عن احترافيتك وتترك انطباعًا دائمًا لدى عملائك وشركائك.</p>
+            <a href="#" class="contact-button">طلب تصميم كارت</a>
+        </div>
+    </div>
 
-            const params = new URLSearchParams({
-                governorate: governorate,
-                court: court,
-                case_type: case_type,
-                subtype: subtype,
-                case_number: case_number,
-                case_year: case_year
-            });
+    <div class="service-section">
+        <div class="service-image-container identity-bg" style="height: 250px;">
+            </div>
+        <div class="service-info">
+            <h2>تصميم هوية بصرية متكاملة</h2>
+            <p>نساعدك في بناء هوية بصرية قوية ومتناسقة تشمل الشعار، الألوان، الخطوط، وغيرها لتعزيز علامتك التجارية.</p>
+            <a href="#" class="contact-button">طلب تصميم هوية</a>
+        </div>
+    </div>
 
-            const url = `/api/search_judgment?${params.toString()}`; // **تأكد من تعديل هذا المسار إلى عنوان URL الفعلي لسكريبت PHP الخاص بك**
+    <div class="service-section">
+        <div class="service-image-container typing-bg" style="height: 250px;">
+            </div>
+        <div class="service-info">
+            <h2>كتابة مستندات (طباعة) وتدقيق لغوي</h2>
+            <p>خدمات كتابة احترافية للمستندات بأنواعها المختلفة مع ضمان الدقة اللغوية والإملائية والتنسيق المتقن.</p>
+            <a href="#" class="contact-button">طلب كتابة مستند</a>
+        </div>
+    </div>
 
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
+    <div class="service-section">
+        <div class="service-image-container cv-bg" style="height: 250px;">
+            </div>
+        <div class="service-info">
+            <h2>تصميم سيرة ذاتية احترافية</h2>
+            <p>اجعل سيرتك الذاتية تبرز بين المنافسين مع تصميم جذاب ومحتوى منظم يسلط الضوء على مهاراتك وخبراتك.</p>
+            <a href="#" class="contact-button">طلب تصميم سيرة ذاتية</a>
+        </div>
+    </div>
 
-                const resultContainer = document.getElementById('result-container');
-                const messageDiv = document.getElementById('message');
-                const detailsDiv = document.getElementById('judgmentDetails');
+    <div class="service-section">
+        <div class="service-image-container office-bg" style="height: 250px;">
+            </div>
+        <div class="service-info">
+            <h2>تنسيق ملفات أوفيس باحترافية</h2>
+            <p>نقدم خدمات تنسيق متكاملة لملفات Microsoft Word و PowerPoint وغيرها لضمان مظهر احترافي وسهل القراءة.</p>
+            <a href="#" class="contact-button">طلب تنسيق ملفات أوفيس</a>
+        </div>
+    </div>
 
-                resultContainer.style.display = 'block';
-                detailsDiv.innerHTML = ''; // مسح النتائج السابقة
+    <div class="service-section">
+        <div class="service-image-container database-bg" style="height: 250px;">
+            </div>
+        <div class="service-info">
+            <h2>تصميم قواعد بيانات بسيطة</h2>
+            <p>نساعدك في تصميم قواعد بيانات بسيطة وفعالة لتنظيم وإدارة بياناتك بسهولة ويسر.</p>
+            <a href="#" class="contact-button">طلب تصميم قاعدة بيانات</a>
+        </div>
+    </div>
 
-                if (data.status === 'success') {
-                    messageDiv.className = 'success';
-                    messageDiv.textContent = 'تم العثور على القضية بنجاح!';
-                    for (const key in data.data) {
-                        if (data.data.hasOwnProperty(key)) {
-                            const p = document.createElement('p');
-                            p.textContent = `<strong>${key}:</strong> ${data.data[key] || 'غير متوفر'}`;
-                            detailsDiv.appendChild(p);
-                        }
-                    }
-                } else if (data.status === 'not_found') {
-                    messageDiv.className = 'not-found';
-                    messageDiv.textContent = data.message;
-                } else if (data.status === 'error') {
-                    messageDiv.className = 'error';
-                    messageDiv.textContent = `حدث خطأ: ${data.message}`;
-                } else {
-                    messageDiv.className = '';
-                    messageDiv.textContent = 'نتيجة غير متوقعة.';
-                }
+    <div class="service-section">
+        <div class="service-image-container excel-bg" style="height: 250px;">
+            </div>
+        <div class="service-info">
+            <h2>تصميم وتنسيق ملفات Excel متقدمة</h2>
+            <p>نقدم خدمات تصميم وتنسيق متقدمة لملفات Excel تشمل الجداول الديناميكية، الرسوم البيانية، والصيغ المعقدة.</p>
+            <a href="#" class="contact-button">طلب تصميم ملف Excel</a>
+        </div>
+    </div>
 
-            } catch (error) {
-                const resultContainer = document.getElementById('result-container');
-                const messageDiv = document.getElementById('message');
-                resultContainer.style.display = 'block';
-                messageDiv.className = 'error';
-                messageDiv.textContent = `حدث خطأ في الاتصال بالخادم: ${error.message}`;
-            }
-        }
-    </script>
+    <div class="custom-request-section">
+        <h2>طلب خدمة مخصصة</h2>
+        <p>هل لديك طلب خاص أو خدمة أخرى غير مذكورة؟ لا تتردد في التواصل معنا لشرح احتياجاتك وسنكون سعداء بتقديم المساعدة.</p>
+        <a href="#" class="custom-request-button">تواصل لطلب مخصص</a>
+    </div>
+
 </body>
 </html>
