@@ -5,15 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>خدمات إلكترونية عصرية</title>
     <style>
+        /* تضمين الخط المخصص */
+        @font-face {
+            font-family: 'خط تطبيقي';
+            src: url('خط تطبيقي.otf') format('opentype'); /* تأكد من وجود الملف في نفس المجلد */
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'خط تطبيقي', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f4f4f4; /* لون احتياطي للخلفية */
             color: #333;
             line-height: 1.6;
         }
 
+        .hero-section {
+            position: relative; /* ضروري لوضع العناصر الأخرى فوقه بشكل مطلق */
+            width: 100%;
+            height: 100vh; /* ارتفاع 100% من ارتفاع الشاشة */
+            overflow: hidden; /* لمنع تجاوز الصورة */
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('تصميمك_للخلفية.jpg'); /* استبدل هذا بمسار صورتك */
+            background-size: cover; /* لتغطية كامل المساحة */
+            background-position: center; /* لتوسيط الصورة */
+            background-repeat: no-repeat; /* لمنع تكرار الصورة */
+            z-index: -1; /* لوضع الخلفية خلف المحتوى */
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* توسيط المحتوى */
+            text-align: center;
+            color: white; /* لون نص المحتوى فوق الخلفية */
+        }
+
+        .hero-content h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: 1.5em;
+        }
+
+        /* باقي أنماط CSS لخدماتك كما هي */
         .service-section {
             background-color: #fff;
             margin: 30px auto;
@@ -60,6 +105,7 @@
         }
 
         .contact-button {
+            font-family: 'خط تطبيقي', sans-serif;
             background-color: #28a745;
             color: white;
             border: none;
@@ -77,6 +123,7 @@
         }
 
         .custom-request-section {
+            font-family: 'خط تطبيقي', sans-serif;
             background-color: #fff;
             margin: 30px auto;
             padding: 30px;
@@ -92,6 +139,7 @@
         }
 
         .custom-request-button {
+            font-family: 'خط تطبيقي', sans-serif;
             background-color: #ffc107;
             color: #333;
             border: none;
@@ -108,7 +156,7 @@
             background-color: #e0a800;
         }
 
-        /* صور افتراضية - قم بتغييرها بمسارات صورك الحقيقية */
+        /* صور افتراضية */
         .brochures-bg { background: url('https://via.placeholder.com/400/007bff/FFFFFF?Text=Brochures') center/cover no-repeat; }
         .cards-bg { background: url('https://via.placeholder.com/400/28a745/FFFFFF?Text=Cards') center/cover no-repeat; }
         .identity-bg { background: url('https://via.placeholder.com/400/dc3545/FFFFFF?Text=Identity') center/cover no-repeat; }
@@ -120,6 +168,17 @@
 
         /* تنسيقات الاستجابة */
         @media (max-width: 768px) {
+            .hero-section {
+                height: auto;
+                padding: 50px 20px;
+                text-align: center;
+            }
+            .hero-content h1 {
+                font-size: 2.5em;
+            }
+            .hero-content p {
+                font-size: 1.2em;
+            }
             .service-section {
                 flex-direction: column;
                 text-align: center;
@@ -139,83 +198,94 @@
 </head>
 <body>
 
-    <div class="service-section">
-        <div class="service-image-container brochures-bg" style="height: 250px;">
-            </div>
-        <div class="service-info">
-            <h2>تصميم برشورات احترافية</h2>
-            <p>نقدم لك تصميمات برشورات إبداعية وجذابة تعكس هوية علامتك التجارية وتوصل رسالتك بوضوح وفعالية.</p>
-            <a href="#" class="contact-button">طلب تصميم برشور</a>
+    <div class="hero-section">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <h1>تصميمات إبداعية تلبي احتياجاتك</h1>
+            <p>نحن نقدم مجموعة متنوعة من الخدمات الإلكترونية الاحترافية.</p>
+            <a href="#services" class="contact-button">اكتشف خدماتنا</a>
         </div>
     </div>
 
-    <div class="service-section">
-        <div class="service-image-container cards-bg" style="height: 250px;">
+    <div id="services">
+        <div class="service-section">
+            <div class="service-image-container brochures-bg" style="height: 250px;">
+                </div>
+            <div class="service-info">
+                <h2>تصميم برشورات احترافية</h2>
+                <p>نقدم لك تصميمات برشورات إبداعية وجذابة تعكس هوية علامتك التجارية وتوصل رسالتك بوضوح وفعالية.</p>
+                <a href="#" class="contact-button">طلب تصميم برشور</a>
             </div>
-        <div class="service-info">
-            <h2>تصميم كروت شخصية مميزة</h2>
-            <p>احصل على تصميم كروت شخصية فريدة تعبر عن احترافيتك وتترك انطباعًا دائمًا لدى عملائك وشركائك.</p>
-            <a href="#" class="contact-button">طلب تصميم كارت</a>
         </div>
-    </div>
 
-    <div class="service-section">
-        <div class="service-image-container identity-bg" style="height: 250px;">
+        <div class="service-section">
+            <div class="service-image-container cards-bg" style="height: 250px;">
+                </div>
+            <div class="service-info">
+                <h2>تصميم كروت شخصية مميزة</h2>
+                <p>احصل على تصميم كروت شخصية فريدة تعبر عن احترافيتك وتترك انطباعًا دائمًا لدى عملائك وشركائك.</p>
+                <a href="#" class="contact-button">طلب تصميم كارت</a>
             </div>
-        <div class="service-info">
-            <h2>تصميم هوية بصرية متكاملة</h2>
-            <p>نساعدك في بناء هوية بصرية قوية ومتناسقة تشمل الشعار، الألوان، الخطوط، وغيرها لتعزيز علامتك التجارية.</p>
-            <a href="#" class="contact-button">طلب تصميم هوية</a>
         </div>
-    </div>
 
-    <div class="service-section">
-        <div class="service-image-container typing-bg" style="height: 250px;">
+        <div class="service-section">
+            <div class="service-image-container identity-bg" style="height: 250px;">
+                </div>
+            <div class="service-info">
+                <h2>تصميم هوية بصرية متكاملة</h2>
+                <p>نساعدك في بناء هوية بصرية قوية ومتناسقة تشمل الشعار، الألوان، الخطوط، وغيرها لتعزيز علامتك التجارية.</p>
+                <a href="#" class="contact-button">طلب تصميم هوية</a>
             </div>
-        <div class="service-info">
-            <h2>كتابة مستندات (طباعة) وتدقيق لغوي</h2>
-            <p>خدمات كتابة احترافية للمستندات بأنواعها المختلفة مع ضمان الدقة اللغوية والإملائية والتنسيق المتقن.</p>
-            <a href="#" class="contact-button">طلب كتابة مستند</a>
         </div>
-    </div>
 
-    <div class="service-section">
-        <div class="service-image-container cv-bg" style="height: 250px;">
+        <div class="service-section">
+            <div class="service-image-container typing-bg" style="height: 250px;">
+                </div>
+            <div class="service-info">
+                <h2>كتابة مستندات (طباعة) وتدقيق لغوي</h2>
+                <p>خدمات كتابة احترافية للمستندات بأنواعها المختلفة مع ضمان الدقة اللغوية والإملائية والتنسيق المتقن.</p>
+                <a href="#" class="contact-button">طلب كتابة مستند</a>
             </div>
-        <div class="service-info">
-            <h2>تصميم سيرة ذاتية احترافية</h2>
-            <p>اجعل سيرتك الذاتية تبرز بين المنافسين مع تصميم جذاب ومحتوى منظم يسلط الضوء على مهاراتك وخبراتك.</p>
-            <a href="#" class="contact-button">طلب تصميم سيرة ذاتية</a>
         </div>
-    </div>
 
-    <div class="service-section">
-        <div class="service-image-container office-bg" style="height: 250px;">
+        <div class="service-section">
+            <div class="service-image-container cv-bg" style="height: 250px;">
+                </div>
+            <div class="service-info">
+                <h2>تصميم سيرة ذاتية احترافية</h2>
+                <p>اجعل سيرتك الذاتية تبرز بين المنافسين مع تصميم جذاب ومحتوى منظم يسلط الضوء على مهاراتك وخبراتك.</p>
+                <a href="#" class="contact-button">طلب تصميم سيرة ذاتية</a>
             </div>
-        <div class="service-info">
-            <h2>تنسيق ملفات أوفيس باحترافية</h2>
-            <p>نقدم خدمات تنسيق متكاملة لملفات Microsoft Word و PowerPoint وغيرها لضمان مظهر احترافي وسهل القراءة.</p>
-            <a href="#" class="contact-button">طلب تنسيق ملفات أوفيس</a>
         </div>
-    </div>
 
-    <div class="service-section">
-        <div class="service-image-container database-bg" style="height: 250px;">
+        <div class="service-section">
+            <div class="service-image-container office-bg" style="height: 250px;">
+                </div>
+            <div class="service-info">
+                <h2>تنسيق ملفات أوفيس باحترافية</h2>
+                <p>نقدم خدمات تنسيق متكاملة لملفات Microsoft Word و PowerPoint وغيرها لضمان مظهر احترافي وسهل القراءة.</p>
+                <a href="#" class="contact-button">طلب تنسيق ملفات أوفيس</a>
             </div>
-        <div class="service-info">
-            <h2>تصميم قواعد بيانات بسيطة</h2>
-            <p>نساعدك في تصميم قواعد بيانات بسيطة وفعالة لتنظيم وإدارة بياناتك بسهولة ويسر.</p>
-            <a href="#" class="contact-button">طلب تصميم قاعدة بيانات</a>
         </div>
-    </div>
 
-    <div class="service-section">
-        <div class="service-image-container excel-bg" style="height: 250px;">
+        <div class="service-section">
+            <div class="service-image-container database-bg" style="height: 250px;">
+                </div>
+            <div class="service-info">
+                <h2>تصميم قواعد بيانات بسيطة</h2>
+                <p>نساعدك في تصميم قواعد بيانات بسيطة وفعالة لتنظيم وإدارة بياناتك بسهولة ويسر.</p>
+                <a href="#" class="contact-button">طلب تصميم قاعدة بيانات</a>
             </div>
-        <div class="service-info">
-            <h2>تصميم وتنسيق ملفات Excel متقدمة</h2>
-            <p>نقدم خدمات تصميم وتنسيق متقدمة لملفات Excel تشمل الجداول الديناميكية، الرسوم البيانية، والصيغ المعقدة.</p>
-            <a href="#" class="contact-button">طلب تصميم ملف Excel</a>
+        </div>
+
+        <div class="service-section">
+            <div class="service-image-container excel-bg" style="height: 250px;">
+                </div>
+            <div class="service-info">
+                <h2>تصميم وتنسيق ملفات Excel متقدمة</h2>
+                <p>نقدم خدمات تصميم وتنسيق متقدمة لملفات Excel تشمل الجداول الديناميكية، الرسوم البيانية، والصيغ المعقدة.</p>
+                <a href="#" class="contact-button">طلب تصميم ملف Excel</a>
+            </div>
         </div>
     </div>
 
