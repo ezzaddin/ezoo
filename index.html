@@ -1,0 +1,60 @@
+async function fetchJudgments(filters = {}) {
+  try {
+    const queryString = Object.keys(filters)
+      .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(filters[key]))
+      .join('&');
+
+    const url = `/api/judgments${queryString ? '?' + queryString : ''}`; // Adjust the API endpoint if needed
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || `HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    console.error("Error fetching judgments:", error);
+    return { error: error.message };
+  }
+}
+
+// مثال لكيفية استخدام الدالة:
+
+// لجلب جميع الأحكام:
+fetchJudgments()
+  .then(judgments => {
+    if (judgments && !judgments.error) {
+      console.log("جميع الأحكام:", judgments);
+      // يمكنك هنا التعامل مع بيانات الأحكام وعرضها في صفحة HTML
+    } else if (judgments && judgments.error) {
+      console.error("حدث خطأ:", judgments.error);
+    }
+  });
+
+// لجلب الأحكام بناءً على نوع القضية والمحكمة:
+const specificFilters = {
+  case_type: 'مدنية',
+  court: 'المحكمة الابتدائية'
+};
+
+fetchJudgments(specificFilters)
+  .then(filteredJudgments => {
+    if (filteredJudgments && !filteredJudgments.error) {
+      console.log("الأحكام المفلترة:", filteredJudgments);
+      // يمكنك هنا التعامل مع بيانات الأحكام المفلترة وعرضها
+    } else if (filteredJudgments && filteredJudgments.error) {
+      console.error("حدث خطأ:", filteredJudgments.error);
+    }
+  });
+
+// يمكنك استدعاء الدالة عند وقوع حدث ما (مثل تغيير في نموذج فلترة)
+// والحصول على البيانات بناءً على الفلاتر المحددة.
