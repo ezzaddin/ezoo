@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عرض الأحكام</title>
+    <title>البحث عن حكم</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,166 +17,152 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        h1, h2 {
+        h1 {
             color: #333;
             text-align: center;
-        }
-        .filter-form {
             margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            display: flex;
+        }
+        .search-form {
+            display: grid;
+            grid-template-columns: auto auto;
             gap: 10px;
-            align-items: center;
+            margin-bottom: 20px;
         }
-        .filter-form label {
-            margin-left: 5px;
+        .search-form label {
+            text-align: right;
         }
-        .filter-form input[type="text"],
-        .filter-form button {
+        .search-form input[type="text"],
+        .search-form button {
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        .filter-form button {
+        .search-form button {
             background-color: #007bff;
             color: white;
             cursor: pointer;
         }
-        .filter-form button:hover {
+        .search-form button:hover {
             background-color: #0056b3;
         }
-        #results-container {
+        #result-container {
             margin-top: 20px;
-            border: 1px solid #ddd;
             padding: 15px;
+            border: 1px solid #ddd;
             border-radius: 5px;
             background-color: #f9f9f9;
         }
-        .judgment-item {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
+        .success {
+            color: green;
+            font-weight: bold;
         }
-        .judgment-item:last-child {
-            border-bottom: none;
+        .not-found {
+            color: orange;
+            font-weight: bold;
         }
-        .error-message {
+        .error {
             color: red;
             font-weight: bold;
-            text-align: center;
-            margin-top: 20px;
+        }
+        .judgment-details p {
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>عرض الأحكام</h1>
-
-        <div class="filter-form">
-            <label for="case_type">نوع القضية:</label>
-            <input type="text" id="case_type" name="case_type">
+        <h1>البحث عن حكم</h1>
+        <form id="searchForm" class="search-form">
+            <label for="governorate">المحافظة:</label>
+            <input type="text" id="governorate" name="governorate">
 
             <label for="court">المحكمة:</label>
             <input type="text" id="court" name="court">
 
-            <label for="governorate">المحافظة:</label>
-            <input type="text" id="governorate" name="governorate">
+            <label for="case_type">نوع القضية:</label>
+            <input type="text" id="case_type" name="case_type">
 
-            <label for="session_date">تاريخ الجلسة:</label>
-            <input type="text" id="session_date" name="session_date" placeholder="YYYY-MM-DD">
+            <label for="subtype">النوع الفرعي:</label>
+            <input type="text" id="subtype" name="subtype">
 
-            <button onclick="applyFilters()">بحث</button>
-        </div>
+            <label for="case_number">رقم القضية:</label>
+            <input type="text" id="case_number" name="case_number">
 
-        <div id="results-container">
-            <h2>نتائج البحث</h2>
-            <div id="judgments-list">
-                </div>
-            <div id="error-message" class="error-message" style="display: none;"></div>
+            <label for="case_year">سنة القضية:</label>
+            <input type="text" id="case_year" name="case_year">
+
+            <div style="grid-column: 1 / 3; text-align: center;">
+                <button type="button" onclick="searchJudgment()">بحث</button>
+            </div>
+        </form>
+
+        <div id="result-container" style="display: none;">
+            <h2>نتيجة البحث</h2>
+            <div id="message"></div>
+            <div id="judgmentDetails" class="judgment-details"></div>
         </div>
     </div>
 
     <script>
-        async function fetchJudgments(filters = {}) {
+        async function searchJudgment() {
+            const governorate = document.getElementById('governorate').value;
+            const court = document.getElementById('court').value;
+            const case_type = document.getElementById('case_type').value;
+            const subtype = document.getElementById('subtype').value;
+            const case_number = document.getElementById('case_number').value;
+            const case_year = document.getElementById('case_year').value;
+
+            const params = new URLSearchParams({
+                governorate: governorate,
+                court: court,
+                case_type: case_type,
+                subtype: subtype,
+                case_number: case_number,
+                case_year: case_year
+            });
+
+            const url = `/api/search_judgment?${params.toString()}`; // **تأكد من تعديل هذا المسار إلى عنوان URL الفعلي لسكريبت PHP الخاص بك**
+
             try {
-                const queryString = Object.keys(filters)
-                    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(filters[key]))
-                    .join('&');
+                const response = await fetch(url);
+                const data = await response.json();
 
-                const url = `/api/judgments${queryString ? '?' + queryString : ''}`; // **تأكد من تعديل هذا المسار إلى عنوان URL الفعلي لنقطة API الخاصة بك**
+                const resultContainer = document.getElementById('result-container');
+                const messageDiv = document.getElementById('message');
+                const detailsDiv = document.getElementById('judgmentDetails');
 
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
+                resultContainer.style.display = 'block';
+                detailsDiv.innerHTML = ''; // مسح النتائج السابقة
 
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || `HTTP error! status: ${response.status}`);
+                if (data.status === 'success') {
+                    messageDiv.className = 'success';
+                    messageDiv.textContent = 'تم العثور على القضية بنجاح!';
+                    for (const key in data.data) {
+                        if (data.data.hasOwnProperty(key)) {
+                            const p = document.createElement('p');
+                            p.textContent = `<strong>${key}:</strong> ${data.data[key] || 'غير متوفر'}`;
+                            detailsDiv.appendChild(p);
+                        }
+                    }
+                } else if (data.status === 'not_found') {
+                    messageDiv.className = 'not-found';
+                    messageDiv.textContent = data.message;
+                } else if (data.status === 'error') {
+                    messageDiv.className = 'error';
+                    messageDiv.textContent = `حدث خطأ: ${data.message}`;
+                } else {
+                    messageDiv.className = '';
+                    messageDiv.textContent = 'نتيجة غير متوقعة.';
                 }
 
-                const data = await response.json();
-                return data;
-
             } catch (error) {
-                console.error("Error fetching judgments:", error);
-                document.getElementById('error-message').textContent = error.message;
-                document.getElementById('error-message').style.display = 'block';
-                document.getElementById('judgments-list').innerHTML = ''; // مسح النتائج السابقة
-                return null; // أو يمكنك إرجاع كائن خطأ { error: error.message }
+                const resultContainer = document.getElementById('result-container');
+                const messageDiv = document.getElementById('message');
+                resultContainer.style.display = 'block';
+                messageDiv.className = 'error';
+                messageDiv.textContent = `حدث خطأ في الاتصال بالخادم: ${error.message}`;
             }
         }
-
-        function displayJudgments(judgments) {
-            const judgmentsListDiv = document.getElementById('judgments-list');
-            judgmentsListDiv.innerHTML = ''; // مسح النتائج السابقة
-
-            if (judgments && Array.isArray(judgments) && judgments.length > 0) {
-                judgments.forEach(judgment => {
-                    const judgmentDiv = document.createElement('div');
-                    judgmentDiv.classList.add('judgment-item');
-                    judgmentDiv.innerHTML = `
-                        <p><strong>نوع القضية:</strong> ${judgment.case_type || 'غير محدد'}</p>
-                        <p><strong>المحكمة:</strong> ${judgment.court || 'غير محدد'}</p>
-                        <p><strong>المحافظة:</strong> ${judgment.governorate || 'غير محدد'}</p>
-                        <p><strong>تاريخ الجلسة:</strong> ${judgment.session_date || 'غير محدد'}</p>
-                        ${judgment.details ? `<p><strong>التفاصيل:</strong> ${judgment.details}</p>` : ''}
-                        <hr>
-                    `;
-                    judgmentsListDiv.appendChild(judgmentDiv);
-                });
-                document.getElementById('error-message').style.display = 'none';
-            } else if (judgments && judgments.error) {
-                document.getElementById('error-message').textContent = judgments.error;
-                document.getElementById('error-message').style.display = 'block';
-            } else {
-                judgmentsListDiv.innerHTML = '<p>لا توجد نتائج مطابقة.</p>';
-                document.getElementById('error-message').style.display = 'none';
-            }
-        }
-
-        function applyFilters() {
-            const filters = {
-                case_type: document.getElementById('case_type').value,
-                court: document.getElementById('court').value,
-                governorate: document.getElementById('governorate').value,
-                session_date: document.getElementById('session_date').value
-            };
-
-            fetchJudgments(filters)
-                .then(data => {
-                    if (data) {
-                        displayJudgments(data);
-                    }
-                });
-        }
-
-        // جلب جميع الأحكام عند تحميل الصفحة (اختياري)
-        // window.onload = applyFilters;
     </script>
 </body>
 </html>
